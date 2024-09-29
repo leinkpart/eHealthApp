@@ -12,6 +12,7 @@ import {
     from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 const Reminder = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [reminders, setReminder] = useState([
@@ -53,6 +54,7 @@ const Reminder = ({ navigation }) => {
     const filteredReminders = reminders.filter((reminder) => {
         return reminder.title.toLowerCase().includes(searchQuery.toLowerCase());
     });
+
   
     const remindersToDisplay = () => {
         switch (selectedTab) {
@@ -162,7 +164,7 @@ const Reminder = ({ navigation }) => {
                 />
             </View>
     
-            <TouchableOpacity style={styles.addReminderButton}>
+            <TouchableOpacity style={styles.addReminderButton} onPress={() => navigation.navigate('AddReminder')}>
                 <Icon name="plus-circle" size={32} color="#fff" />
             </TouchableOpacity>       
         </View>
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         marginBottom: 16,
-        elevation: 10,
+        elevation: 2,
     },
 
     searchInput: {
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         alignItems: 'center',
-        elevation: 10,
+        elevation: 1,
     },
 
     activeTab: {
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         marginBottom: 10,
-        elevation: 2,
+        elevation: 1,
     },
 
     reminderTitle: {
@@ -272,6 +274,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#00C853',
         borderRadius: 50,
         padding: 16,
+        elevation: 10,
     },
 });
 

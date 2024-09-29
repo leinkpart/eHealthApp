@@ -8,8 +8,9 @@ import Login from './src/screens/LoginScreen';
 import Setting from './src/screens/SettingsScreen';
 import Reminder from './src/screens/Reminder';
 import Home from './src/screens/Home';
-import Community from './component/CommunityCard';
+import Community from './src/screens/Community';
 import Notify from './src/screens/Notification';
+import AddReminder from './src/screens/AddReminder';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -52,7 +53,7 @@ function TabNavigator() {
       }}
     >
       <Tab.Screen 
-        name="Home" 
+        name="Tabs" 
         component={Home} 
         options={{
           headerShown: false,
@@ -138,6 +139,16 @@ function App() {
               color: '#000', 
             },
           }}
+        />
+
+        <Stack.Screen 
+          name="AddReminder" 
+          component={AddReminder} 
+          options={{ 
+            title: 'New reminder',
+            //presentation: 'modal', 
+            headerShown: false,    // Hide header for modal
+          }} 
         />
 
         <Stack.Screen name="Home" component={TabNavigator} 
