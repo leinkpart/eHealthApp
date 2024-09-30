@@ -27,7 +27,7 @@ const Home = ({ navigation }) => {
     // Thành phần Activity được cập nhật để bao gồm thanh tiến trình hình tròn
     const Activity = ({ name, time, progress, icon }) => {
         return (
-            <TouchableOpacity style={styles.activity}>
+            <TouchableOpacity style={styles.activity} onPress={() => navigation.navigate(name)}>
 
                 <Image source={icon} style={styles.icon} />
 
@@ -94,7 +94,7 @@ const Home = ({ navigation }) => {
                 <Text style={styles.actText}>Your Activities</Text>
 
                 <View style={styles.actContain}>
-                    <Activity
+                    <Activity 
                         time="30 min"
                         progress={50}
                         icon={require('../assets/cycling.png')}

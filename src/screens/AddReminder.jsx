@@ -111,10 +111,6 @@ const AddReminder = ({ navigation }) => {
         setSelectedTime(time);
         hideTime();
     };
-
-    const detailReminder = () => {
-        navigation.navigate('Details');
-    }
   
     return (   
         <View style={styles.container}>
@@ -233,10 +229,12 @@ const AddReminder = ({ navigation }) => {
                             />
                         </>
                     )}
-                    </Animated.View>
+                    </Animated.View>                  
+                </View>
 
-                    <TouchableOpacity style={styles.detailBtn} >
-                        <Text style={styles.detailText}>Details</Text>
+                <View style={styles.detailContainer}>
+                    <TouchableOpacity style={styles.detailBtn} onPress={() => navigation.navigate('Repeat')} >
+                        <Text style={styles.detailText}>Repeat</Text>
                         <IconForward name="chevron-forward" style={styles.iconForward} />
                     </TouchableOpacity>
                 </View>
@@ -355,7 +353,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 10,
         paddingTop: 10,
-        paddingLeft: 17
+        paddingLeft: 17,
+        fontWeight: '500',
     },
 
     openDate: {
@@ -404,7 +403,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingTop: 10,
         paddingLeft: 17,
-        fontWeight: '700',  
+        fontWeight: '500',  
     },
     
   
@@ -414,6 +413,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         borderRadius: 14,
+        marginBottom: 15,
     },
 
     openTimeText: {

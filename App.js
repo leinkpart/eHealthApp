@@ -11,6 +11,8 @@ import Home from './src/screens/Home';
 import Community from './src/screens/Community';
 import Notify from './src/screens/Notification';
 import AddReminder from './src/screens/AddReminder';
+import Repeat from './src/screens/RepeatAction';
+import Walking from './src/screens/WalkingScreen';
 
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -53,7 +55,7 @@ function TabNavigator() {
       }}
     >
       <Tab.Screen 
-        name="Tabs" 
+        name="Home" 
         component={Home} 
         options={{
           headerShown: false,
@@ -130,6 +132,12 @@ function App() {
           }}
         />
 
+        <Stack.Screen name="Walking" component={Walking}
+          options={{
+            headerShown: true
+          }}
+        />
+
         <Stack.Screen name="Reminder" component={Reminder} 
           options={{
             title: 'Reminder',
@@ -147,6 +155,16 @@ function App() {
           options={{ 
             title: 'New reminder',
             //presentation: 'modal', 
+            headerShown: false,    // Hide header for modal
+          }} 
+        />
+
+        <Stack.Screen 
+          name="Repeat" 
+          component={Repeat} 
+          options={{ 
+            title: 'Repeat',
+            presentation: 'modal', 
             headerShown: false,    // Hide header for modal
           }} 
         />
