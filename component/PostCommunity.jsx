@@ -30,7 +30,7 @@ const PostComponent = ({ post }) => {
           <Text style={styles.postTime}>{post.time}</Text>
         </View>
         <TouchableOpacity style={styles.optionsButton}>
-          <Icon name="dots-three-horizontal" size={27} color="#777" />
+          <Icon name="dots-three-horizontal" size={24} color="#777" />
         </TouchableOpacity>
       </View>
 
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   },
   optionsButton: {
     marginLeft: 'auto',
-    height: 40,
-    width: 40,
+    height: 35,
+    width: 35,
     borderRadius: 20,
     backgroundColor: '#f1f1f1',
     marginBottom: 15,

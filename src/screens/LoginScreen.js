@@ -1,8 +1,12 @@
 import React, {useState} from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconFont from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
+//import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore'
+import { ActivityIndicator } from 'react-native';
 
 
 
@@ -49,6 +53,27 @@ const SignInComponent = () => {
 
     const navigation = useNavigation();
 
+    const handleSignIn = async () => {
+        if (!email) {
+            setError('Please enter your email');
+            return;
+        }
+
+        if (!password) {
+            setError('Please enter your password');
+            return;
+        }
+
+        try {
+            // Đăng nhập người dùng
+            await auth().signInWithEmailAndPassword(email, password);
+            // Chuyển hướng đến trang Home sau khi đăng nhập thành công
+            navigation.navigate('HomeScreen');
+        } catch (error) {
+            setError(error.message); // Hiển thị thông báo lỗi nếu có
+        }
+    };
+
     return (
         <View>
             <TextInput
@@ -80,14 +105,17 @@ const SignInComponent = () => {
             <TouchableOpacity>
                 <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
+
+            {/* Hiển thị lỗi nếu có */}
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
                 
-            <TouchableOpacity style={styles.signInButton}onPress={() => navigation.navigate('Home')} >
+            <TouchableOpacity style={styles.signInButton}onPress={handleSignIn} >
                 <Text style={styles.buttonText}>SIGN IN</Text>
             </TouchableOpacity>
 
             <View style={styles.separator}>
                 <View style={styles.line}/>
-                <Text style={styles.textLine}>Or</Text>
+                    <Text style={styles.textLine}>Or</Text>
                 <View style={styles.line}/>
             </View>
 
@@ -115,11 +143,67 @@ const SignInComponent = () => {
 };
 
 const SignUpComponent = () => {
+    const [username, setUsername] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
+
+    const handleSignUp = async () => {
+        if (password !== repeatPassword) {
+            setError('Passwords do not match!');
+            return;
+        }
+
+        if (!username || !email || !password) {
+            setError('Please fill all fields');
+            return;
+        }
+
+        if (password.length < 8) {
+            setError('Password must be at least 8 characters long!');
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            // Đăng ký người dùng mới
+            const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+            const userId = userCredential.user.uid; // Lấy uid của người dùng
+
+            // Lưu thông tin người dùng vào Realtime Database
+            await firestore().collection('users').doc(userId).set({
+                username: username,
+                email: email,
+                password: password,
+                avatar: null, 
+                createdAt: new Date().toISOString(),
+                walkingData: {
+                    steps: 0,
+                    percentage: 0,
+                    calories: 0,
+                    distance: 0,
+                    duration: 0,
+                    weeklyData: [0, 0, 0, 0, 0, 0, 0],
+                },
+            });
+
+            Alert.alert('Notification', 'Seccessful Signed Up.')
+
+            console.log("User sign up successfully!");
+
+            // Chuyển hướng đến màn hình chính sau khi đăng ký thành công
+            navigation.navigate('HomeScreen');
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false); // Dừng loading sau khi hoàn thành
+        }
+    };
 
     return (
         <View>
@@ -127,6 +211,8 @@ const SignUpComponent = () => {
                 style={styles.input} 
                 placeholder="Username" 
                 placeholderTextColor="#999"
+                value={username}
+                onChangeText={setUsername}
             />
             <TextInput 
                 style={styles.input} 
@@ -181,8 +267,8 @@ const SignUpComponent = () => {
                 {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
 
-            <TouchableOpacity style={styles.signInButton} >
-                <Text style={styles.buttonText}>SIGN UP</Text>
+            <TouchableOpacity style={styles.signInButton} onPress={handleSignUp} disabled={loading} >
+                {loading ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.buttonText}>SIGN UP</Text>}
             </TouchableOpacity>
         </View>
     );

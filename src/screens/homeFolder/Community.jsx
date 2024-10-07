@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
 import { View, ScrollView, StyleSheet, FlatList, Image, Text, TouchableOpacity } from 'react-native';
-import PostComponent from '../../component/PostCommunity';
+import PostComponent from '../../../component/PostCommunity';
 //import { v4 as uuidv4 } from 'uuid';
 
 
 const users = [
     {
         id: 1,
-        name: "Jessica Mendez",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc9998c2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+        name: "Mendez",
+        avatar: "https://randomuser.me/portraits/men/1.jpg"
     },
     {
         id: 2,
-        name: "John Doe",
-        avatar: "https://images.unsplash.com/photo-1534528740890-4b3b388279f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8d29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+        name: "Alan Biker",
+        avatar: "https://randomuser.me/portraits/men/20.jpg"
     },
     {
         id: 3,
@@ -22,23 +22,38 @@ const users = [
     },
     {
         id: 4,
-        name: "Jane Doe",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFuJTIwd2l0aCUyMGJlYXJkJTIwYW5kJTIwd29tYW4lMjBzaGFkb3dzfGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        name: "Alan Farmer",
+        avatar: "https://randomuser.me/portraits/men/3.jpg"
     },
     {
         id: 5,
-        name: "Jane Doe",
-        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFuJTIwd2l0aCUyMGJlYXJkJTIwYW5kJTIwd29tYW4lMjBzaGFkb3dzfGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        name: "Danze Mike",
+        avatar: "https://randomuser.me/portraits/men/4.jpg"
     },
     {
         id: 6,
         name: "Peter",
-        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8bWFuJTIwd2l0aCUyMGJlYXJkJTIwYW5kJTIwd29tYW4lMjBzaGFkb3dzfGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+        avatar: "https://randomuser.me/portraits/men/9.jpg"
     },
     {
         id: 7,
-        name: "Maria",
-        avatar: "https://images.unsplash.com/photo-1534528740890-4b3b388279f9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8d29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+        name: "Fored",
+        avatar: "https://randomuser.me/portraits/men/14.jpg"
+    },
+    {
+        id: 8,
+        name: "Jaik",
+        avatar: "https://randomuser.me/portraits/men/17.jpg"
+    },
+    {
+        id: 9,
+        name: "Alan Fixer",
+        avatar: "https://randomuser.me/portraits/men/40.jpg"
+    },
+    {
+        id: 10,
+        name: "William",
+        avatar: "https://randomuser.me/portraits/men/37.jpg"
     }
 ];
 
@@ -66,7 +81,7 @@ export default function Community() {
         {
             //id: uuidv4(),
             userName: 'Jessica Mendez',
-            avatar: "https://images.unsplash.com/photo-1500648767791-00dcc9998c2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+            avatar: "https://randomuser.me/portraits/men/37.jpg",
             time: '10m ago',
             text: 'A Delicious breakfast on weekend #brekkie',
             images: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg', 'https://example.com/image3.jpg'],
@@ -99,7 +114,7 @@ export default function Community() {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.header}>
                     <TouchableOpacity style={styles.addPostButton}>
                         <Text style={styles.addPostButtonText}>+</Text>
@@ -129,7 +144,6 @@ export default function Community() {
                 ))}
             </ScrollView>
 
-            <View style={{height: 85, backgroundColor: '#eddfe0', borderRadius: 20}} />
         </View>
     );
 }
@@ -138,6 +152,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#eddfe0',
+    },
+
+    scrollViewContent: {
+        paddingBottom: 130,
     },
 
     header: {

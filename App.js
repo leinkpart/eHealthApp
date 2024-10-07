@@ -3,28 +3,26 @@ import { View, Text, TouchableOpacity, Settings } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+
 import Onboard from './src/screens/Onboarding';
 import Login from './src/screens/LoginScreen';
 import Setting from './src/screens/SettingsScreen';
-import Reminder from './src/screens/Reminder';
-import Home from './src/screens/Home';
-import Community from './src/screens/Community';
-import Notify from './src/screens/Notification';
-import AddReminder from './src/screens/AddReminder';
-import Repeat from './src/screens/RepeatAction';
-import Walking from './src/screens/WalkingScreen';
+import Reminder from './src/screens/remindFolder/Reminder';
+import Home from './src/screens/homeFolder/Home';
+import Community from './src/screens/homeFolder/Community';
+import Notify from './src/screens/homeFolder/Notification';
+import AddReminder from './src/screens/remindFolder/AddReminder';
+import Repeat from './src/screens/remindFolder/RepeatAction';
+import Walking from './src/screens/homeFolder/WalkingScreen';
+import Fitness from './src/screens/homeFolder/Fitness';
+import FitnessVideo from './src/screens/homeFolder/FitnessVideo';
 
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
+import IconEmoji from 'react-native-vector-icons/Entypo'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
-
-//const HomeScreen = () => <View><Text>Home Screen</Text></View>;
-const MicScreen = () => <View><Text>Mic Screen</Text></View>;
-const ListScreen = () => <View><Text>List Screen</Text></View>;
-//const ProfileScreen = () => <View><Text>Profile Screen</Text></View>;
 
 function TabNavigator() {
   return (
@@ -66,21 +64,21 @@ function TabNavigator() {
       />
 
       <Tab.Screen 
-        name="UnKnow" 
-        component={MicScreen} 
+        name="Fitness" 
+        component={Fitness} 
         options={{
           tabBarIcon: ({ focused }) => (
-            <Icon name="filter-circle" size={40} color={focused ? '#4F75FF' : '#697565'} />
+            <Icon name="fitness" size={40} color={focused ? '#4F75FF' : '#697565'} />
           ),
         }}
       />
       <Tab.Screen 
         name="Add" 
-        component={Setting} 
+        component={Notify} 
         options={{
           tabBarButton: (props) => (
             <CustomTabBarButton {...props}>
-              <Icon name="add-circle" size={45} color="#fff" />
+              <IconEmoji name="emoji-flirt" size={45} color="#fff" />
             </CustomTabBarButton>
           )
         }}
@@ -169,7 +167,7 @@ function App() {
           }} 
         />
 
-        <Stack.Screen name="Home" component={TabNavigator} 
+        <Stack.Screen name="HomeScreen" component={TabNavigator} 
           options={{
             headerShown: false,
           }}
@@ -179,6 +177,13 @@ function App() {
           options={{
             headerShown: true,
             title: 'Notify',
+          }}
+        />
+
+        <Stack.Screen name="Video" component={FitnessVideo} 
+          options={{
+            headerShown: true,
+            title: 'Watch video',
           }}
         />
       </Stack.Navigator>
@@ -208,7 +213,7 @@ const styles = {
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#15B392',
     justifyContent: 'center',
     alignItems: 'center',
   },
