@@ -1,8 +1,10 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, {useEffect} from "react";
 // @ts-ignore
 import Onboarding from 'react-native-onboarding-swiper';
 import { useNavigation } from "@react-navigation/native";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const DoneButtonComponent = ({...rest}) => {
@@ -41,6 +43,21 @@ const DotComponent = ({ selected }) => {
 
 const OnboardingScreen = () => {
     const navigation = useNavigation();
+
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+        const userToken = await AsyncStorage.getItem('userToken');
+        if (userToken) {
+            navigation.navigate('HomeScreen'); // Điều hướng đến HomeScreen nếu đã đăng nhập
+        } 
+        // else {
+        //     navigation.navigate('Login'); // Điều hướng đến Login nếu chưa đăng nhập
+        // }
+        };
+
+        checkLoginStatus();
+    }, [navigation]);
+
     const onDone = () => {
         navigation.navigate("Login");
     };

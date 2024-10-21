@@ -8,6 +8,8 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore'
 import { ActivityIndicator } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 const SignIn = () => {
@@ -66,11 +68,24 @@ const SignInComponent = () => {
 
         try {
             // Đăng nhập người dùng
-            await auth().signInWithEmailAndPassword(email, password);
+            const userCredential = await auth().signInWithEmailAndPassword(email, password);
+        
+            // Lưu thông tin đăng nhập vào AsyncStorage
+            const user = userCredential.user;
+            
+            await AsyncStorage.setItem('userToken', user.uid);
             // Chuyển hướng đến trang Home sau khi đăng nhập thành công
             navigation.navigate('HomeScreen');
         } catch (error) {
-            setError(error.message); // Hiển thị thông báo lỗi nếu có
+            if (error.code === 'auth/user-not-found') {
+                setError('Email is incorrect, try again!');
+            } else if (error.code === 'auth/wrong-password') {
+                setError('Password is incorrect, try again!');
+            } else if (error.code === 'auth/invalid-email') {
+                setError('Invalid email format, try again!');
+            } else {
+                setError('Login failed, try again later!');
+            }
         }
     };
 

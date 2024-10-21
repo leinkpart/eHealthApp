@@ -23,33 +23,6 @@ const Home = ({ navigation }) => {
     };
 
     useEffect(() => {
-        const fetchUsername = async () => {
-            try {
-                const uid = auth().currentUser?.uid;
-    
-                if (uid) {
-                    // Fetch user document from Firestore
-                    const userDoc = await firestore().collection('users').doc(uid).get();
-                    
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        setUsername(userData.username); // Assuming 'username' field exists in Firestore
-                    } else {
-                        console.log("User document doesn't exist.");
-                    }
-                } else {
-                    console.log('User is not logged in');
-                }
-            } catch (error) {
-                console.error("Error fetching username: ", error);
-            }
-        };
-    
-        fetchUsername();
-    }, []);
-    
-
-    useEffect(() => {
         const updateDate = () => {
             const date = new Date();
             const day = String(date.getDate()).padStart(2, '0');
@@ -62,6 +35,23 @@ const Home = ({ navigation }) => {
         const intervalId = setInterval(updateDate, 1000);
       
         return () => clearInterval(intervalId);
+    }, []);
+
+
+    useEffect(() => {
+        const userId = auth().currentUser?.uid; // Lấy UID của người dùng đã đăng nhập
+        if (userId) {
+            const unsubscribe = firestore()
+                .collection('users') // Thay đổi tên collection nếu cần
+                .doc(userId)
+                .onSnapshot(doc => {
+                    if (doc.exists) {
+                        setUsername(doc.data().username); // Lấy tên người dùng từ document
+                    }
+                });
+
+            return () => unsubscribe(); // Dọn dẹp subscription
+        }
     }, []);
 
     // Thành phần Activity được cập nhật để bao gồm thanh tiến trình hình tròn
@@ -123,8 +113,7 @@ const Home = ({ navigation }) => {
                                 resizeMode="cover"
                             />
 
-                        </TouchableOpacity>                  
-                                
+                        </TouchableOpacity>                                                
 
                         <View style={styles.headerCont}>
                             
@@ -180,10 +169,10 @@ const Home = ({ navigation }) => {
                             icon={require('../../assets/walking.png')}
                         />
                         <Activity
-                            name="Yoga"
+                            name="Fitness"
                             time="60 min"
-                            progress={100}
-                            icon={require('../../assets/yoga.png')}
+                            progress={50}
+                            icon={require('../../assets/fitness2.png')}
                         />
                     </View>
                     
@@ -213,17 +202,6 @@ const Home = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
-
-                <View style={{ 
-                    height: 85, 
-                    backgroundColor: '#eddfe0', 
-                    // left: 0, 
-                    // right: 0, 
-                    // bottom: 0,
-                    top: '90%',
-                    zIndex: 3
-                }}> 
-                </View>
             </View>
         </View>
     );

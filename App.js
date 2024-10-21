@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, TouchableOpacity, Settings } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Onboard from './src/screens/Onboarding';
 import Login from './src/screens/LoginScreen';
-import Setting from './src/screens/SettingsScreen';
+import Setting from './src/screens/homeFolder/SettingsScreen';
 import Reminder from './src/screens/remindFolder/Reminder';
 import Home from './src/screens/homeFolder/Home';
 import Community from './src/screens/homeFolder/Community';
@@ -17,9 +17,15 @@ import Repeat from './src/screens/remindFolder/RepeatAction';
 import Walking from './src/screens/homeFolder/WalkingScreen';
 import Fitness from './src/screens/homeFolder/Fitness';
 import FitnessVideo from './src/screens/homeFolder/FitnessVideo';
+import SlideUser from './component/SlideUser';
+import Cycling from './src/screens/homeFolder/BikeTracking';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconEmoji from 'react-native-vector-icons/Entypo'
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import auth from '@react-native-firebase/auth';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -107,13 +113,23 @@ function TabNavigator() {
 }
 
 function App() {
-  const [isFirstLaunch, setIsFirstLaunch] = React.useState(false);
 
-  React.useEffect(() => {
-    // When the app loads fisrt
-    // async storage 
-    // await AsyncStorage.setItem('isFirstLaunch', true)
-  })
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            console.log("User is signed in: ", user);
+            // Lưu thông tin vào AsyncStorage nếu cần
+            await AsyncStorage.setItem('userToken', user.uid);
+        } else {
+            console.log("No user is signed in.");
+            // Có thể chuyển hướng đến màn hình đăng nhập nếu không có người dùng
+            // Chú ý rằng navigation sẽ cần được truy cập từ context
+        }
+    });
+
+    return () => unsubscribe(); // Dọn dẹp listener khi component unmount
+}, []);
+  
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -131,6 +147,12 @@ function App() {
         />
 
         <Stack.Screen name="Walking" component={Walking}
+          options={{
+            headerShown: true
+          }}
+        />
+
+        <Stack.Screen name="Cycling" component={Cycling}
           options={{
             headerShown: true
           }}
@@ -181,6 +203,13 @@ function App() {
         />
 
         <Stack.Screen name="Video" component={FitnessVideo} 
+          options={{
+            headerShown: true,
+            title: 'Watch video',
+          }}
+        />
+
+        <Stack.Screen name="Sidebar" component={SlideUser} 
           options={{
             headerShown: true,
             title: 'Watch video',
