@@ -101,10 +101,12 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        width: '95%', 
+        width: '60%', 
         height: '30%', 
         marginBottom: 20, 
         borderRadius: 20,
+        marginTop: 10,
+        padding: 5,
     },
 });
 

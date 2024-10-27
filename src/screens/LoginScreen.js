@@ -69,11 +69,12 @@ const SignInComponent = () => {
         try {
             // Đăng nhập người dùng
             const userCredential = await auth().signInWithEmailAndPassword(email, password);
-        
-            // Lưu thông tin đăng nhập vào AsyncStorage
-            const user = userCredential.user;
+            const newUserToken = userCredential.user.uid;
             
-            await AsyncStorage.setItem('userToken', user.uid);
+            // Lưu token vào AsyncStorage
+            await AsyncStorage.setItem('userToken', newUserToken);
+            console.log("User token saved to AsyncStorage:", newUserToken);
+            
             // Chuyển hướng đến trang Home sau khi đăng nhập thành công
             navigation.navigate('HomeScreen');
         } catch (error) {

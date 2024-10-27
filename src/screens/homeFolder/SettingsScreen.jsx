@@ -8,6 +8,10 @@ import Icon from "react-native-vector-icons/Ionicons"
 import DarkLightTheme from "react-native-vector-icons/MaterialCommunityIcons"
 import DarkTheme from "react-native-vector-icons/MaterialIcons";
 import LightTheme from "react-native-vector-icons/Feather";
+import { useTheme } from '../../../component/ThemeContext';
+
+
+
 
 const SettingsScreen = () => {
     const [theme, setTheme] = useState('automatic');
@@ -25,6 +29,7 @@ const SettingsScreen = () => {
     const handleThreeFingerLongPressChange = () => {
         setThreeFingerLongPress(!threeFingerLongPress);
     };
+
 
     return (      
         <View style={styles.container}>

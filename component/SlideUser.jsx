@@ -18,7 +18,7 @@ const SlideBar = ({ visible, onClose }) => {
             if (currentUser) {
                 // Nếu có người dùng hiện tại, tiến hành đăng xuất
                 await auth().signOut();
-                await AsyncStorage.removeItem('userToken');
+                await AsyncStorage.clear();
                 navigation.navigate('Login');
             } else {
                 console.log("No user currently signed in.");

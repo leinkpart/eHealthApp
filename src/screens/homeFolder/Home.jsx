@@ -18,6 +18,8 @@ const Home = ({ navigation }) => {
 
     const [isMenuVisible, setMenuVisible] = useState(false);
 
+    const [activities, setActivities] = useState([]);
+
     const userSlide = () => {
         setMenuVisible(!isMenuVisible);
     };
@@ -39,20 +41,39 @@ const Home = ({ navigation }) => {
 
 
     useEffect(() => {
-        const userId = auth().currentUser?.uid; // Lấy UID của người dùng đã đăng nhập
-        if (userId) {
-            const unsubscribe = firestore()
-                .collection('users') // Thay đổi tên collection nếu cần
-                .doc(userId)
-                .onSnapshot(doc => {
-                    if (doc.exists) {
-                        setUsername(doc.data().username); // Lấy tên người dùng từ document
-                    }
-                });
+        const unsubscribeAuth = auth().onAuthStateChanged(user => {
+            if (user) {
+                const userId = user.uid;
+                if (userId) {
+                    const userRef = firestore().collection('users').doc(userId);
+                    
+                    // Get username
+                    userRef.onSnapshot(doc => {
+                        if (doc.exists) {
+                            setUsername(doc.data().username);
+                        }
+                    });
 
-            return () => unsubscribe(); // Dọn dẹp subscription
-        }
+                    // Get activities subcollection
+                    const unsubscribeActivities = userRef.collection('activities')
+                        .onSnapshot(querySnapshot => {
+                            const fetchedActivities = querySnapshot.docs.map(doc => ({
+                                id: doc.id,
+                                ...doc.data()
+                            }));
+                            setActivities(fetchedActivities); // Update activities state
+                        });
+                    
+                    return () => unsubscribeActivities();
+                }
+            } else {
+                setUsername('');
+                setActivities([]);
+            }
+        });
+        return () => unsubscribeAuth();
     }, []);
+    
 
     // Thành phần Activity được cập nhật để bao gồm thanh tiến trình hình tròn
     const Activity = ({ name, time, progress, icon }) => {
@@ -80,7 +101,7 @@ const Home = ({ navigation }) => {
                 </AnimatedCircularProgress>
 
                 <View style={styles.info}>
-                    <Text style={styles.time}>{time}</Text>
+                    <Text style={styles.time}>{time} min</Text>
                     <Text style={styles.name}>{name}</Text>
                 </View>
             </TouchableOpacity>
@@ -157,21 +178,22 @@ const Home = ({ navigation }) => {
 
                     <View style={styles.actContain}>
                         <Activity 
-                            time="30 min"
-                            progress={50}
+                            key={activities.id}
+                            time={activities.duration}
+                            progress={activities.percentage}
                             icon={require('../../assets/cycling.png')}
                             name="Cycling"
                         />
                         <Activity
                             name="Walking"
-                            time="45 min"
-                            progress={75}
+                            time={activities.duration}
+                            progress={activities.percentage}
                             icon={require('../../assets/walking.png')}
                         />
                         <Activity
                             name="Fitness"
-                            time="60 min"
-                            progress={50}
+                            time={activities.duration}
+                            progress={activities.percentage}
                             icon={require('../../assets/fitness2.png')}
                         />
                     </View>

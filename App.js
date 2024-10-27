@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Settings } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ThemeProvider } from './component/ThemeContext';
 
 
 import Onboard from './src/screens/Onboarding';
@@ -131,6 +132,7 @@ function App() {
 }, []);
   
   return (
+    <ThemeProvider>
     <NavigationContainer>
       <Stack.Navigator>
         {
@@ -217,6 +219,7 @@ function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </ThemeProvider>
   );
 };
 
